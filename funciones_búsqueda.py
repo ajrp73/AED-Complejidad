@@ -114,9 +114,32 @@ def medir_tiempos_busqueda_dicotomica(array_longitudes, valor):
 
     return tiempos
 
+    # Crear un array con 6 valores que se incrementan exponencialmente a partir de 10
+array_longitudes = [(10 ** (i+2)) for i in range(6)]
+valor_a_buscar = 2
+
+    # Obtener los tiempos de búsqueda lineal
+tiempos_lineal = medir_tiempos_busqueda_lineal(array_longitudes, valor_a_buscar)
+
+print("Tiempos de búsqueda lineal:")
+for i, longitud in enumerate(array_longitudes):
+    print(f"Longitud del array: {longitud}")
+    print(f"  Mejor caso: {tiempos_lineal['mejor_caso'][i]:.6f} segundos")
+    print(f"  Caso medio: {tiempos_lineal['caso_medio'][i]:.6f} segundos")
+    print(f"  Peor caso: {tiempos_lineal['peor_caso'][i]:.6f} segundos")
 
 
+# Obtener los tiempos de búsqueda dicotómica
+tiempos_dicotomica = medir_tiempos_busqueda_dicotomica(array_longitudes, valor_a_buscar)
 
+print("Tiempos de búsqueda dicotómica:")
+for i, longitud in enumerate(array_longitudes):
+    print(f"Longitud del array: {longitud}")
+    print(f"  Mejor caso: {tiempos_dicotomica['mejor_caso'][i]:.6f} segundos")
+    print(f"  Caso medio: {tiempos_dicotomica['caso_medio'][i]:.6f} segundos")
+    print(f"  Peor caso: {tiempos_dicotomica['peor_caso'][i]:.6f} segundos")
+
+exit(0)
 # Ejemplo de uso
 # Crear un array con 10 enteros positivos aleatorios entre 0 y 20
 
