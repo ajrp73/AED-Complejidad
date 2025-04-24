@@ -16,27 +16,45 @@ def ordenacion_burbuja(array):
                 array[j], array[j+1] = array[j+1], array[j]
     return array
 
-def medir_tiempos_ordenacion_burbuja(longitudes):
-        """
-        Crea arrays de las longitudes especificadas, los inicializa aleatoriamente,
-        los ordena usando el algoritmo de burbuja y mide el tiempo invertido.
+def medir_tiempos_casos_ordenacion_burbuja(longitudes):
+    """
+    Mide los tiempos de ordenación por burbuja para el mejor caso, peor caso y caso medio.
 
-        :param longitudes: Lista de longitudes de los arrays a generar.
-        :return: Lista de tuplas (longitud, tiempo_invertido).
-        """
-        resultados = []
-        for longitud in longitudes:
-            # Crear un array aleatorio de la longitud especificada
-            array = [random.randint(0, 100) for _ in range(longitud)]
-            # Medir el tiempo antes y después de la ordenación
-            inicio = time.time()
-            ordenacion_burbuja(array)
-            fin = time.time()
-            # Calcular el tiempo invertido
-            tiempo_invertido = fin - inicio
-            # Guardar el resultado
-            resultados.append((longitud, tiempo_invertido))
-        return resultados
+    :param longitudes: Lista de longitudes de los arrays a generar.
+    :return: Diccionario con claves 'mejor_caso', 'peor_caso', 'medio_caso' y valores como listas de tiempos para cada longitud.
+    """
+    tiempos = {
+        'mejor_caso': [],
+        'peor_caso': [],
+        'medio_caso': []
+    }
+    for longitud in longitudes:
+        # Crear un array aleatorio de la longitud especificada
+        array = [random.randint(0, 100) for _ in range(longitud)]
+        
+        # Mejor caso: array ya ordenado
+        array_mejor = sorted(array)
+        inicio = time.time()
+        ordenacion_burbuja(array_mejor)
+        fin = time.time()
+        tiempos['mejor_caso'].append(fin - inicio)
+
+        # Peor caso: array ordenado inversamente
+        array_peor = sorted(array, reverse=True)
+        inicio = time.time()
+        ordenacion_burbuja(array_peor)
+        fin = time.time()
+        tiempos['peor_caso'].append(fin - inicio)
+
+        # Caso medio: array aleatorio
+        array_medio = array[:]
+        inicio = time.time()
+        ordenacion_burbuja(array_medio)
+        fin = time.time()
+        tiempos['medio_caso'].append(fin - inicio)
+    
+    return tiempos
+
 
 def ordenación_quicksort(array):
             """
@@ -47,30 +65,87 @@ def ordenación_quicksort(array):
             """
             if len(array) <= 1:
                 # Si el array tiene 0 o 1 elementos, ya está ordenado
-                print(f"Array {array} ya está ordenado o tiene un solo elemento.")
                 return array
             else:
                 # Elegir el pivote como el elemento central
                 pivot = array[len(array) // 2]
-                print(f"Elegimos el pivote: {pivot}")
-                
+                               
                 # Dividir el array en tres partes: menores, iguales y mayores
                 menores = [x for x in array if x < pivot]
                 iguales = [x for x in array if x == pivot]
                 mayores = [x for x in array if x > pivot]
                 
-                print(f"Elementos menores que el pivote {pivot}: {menores}")
-                print(f"Elementos iguales al pivote {pivot}: {iguales}")
-                print(f"Elementos mayores que el pivote {pivot}: {mayores}")
+                #print(f"Elementos menores que el pivote {pivot}: {menores}")
+                #print(f"Elementos iguales al pivote {pivot}: {iguales}")
+                #print(f"Elementos mayores que el pivote {pivot}: {mayores}")
                 
                 # Recursivamente ordenar las partes menores y mayores
                 return ordenación_quicksort(menores) + iguales + ordenación_quicksort(mayores)
 
 
+def medir_tiempos_casos_ordenacion_quicksort(longitudes):
+    """
+    Mide los tiempos de ordenación por quicksort para el mejor caso, peor caso y caso medio.
+
+    :param longitudes: Lista de longitudes de los arrays a generar.
+    :return: Diccionario con claves 'mejor_caso', 'peor_caso', 'medio_caso' y valores como listas de tiempos para cada longitud.
+    """
+    tiempos = {
+        'mejor_caso': [],
+        'peor_caso': [],
+        'medio_caso': []
+    }
+    for longitud in longitudes:
+        # Crear un array aleatorio de la longitud especificada
+        array = [random.randint(0, 100) for _ in range(longitud)]
+        
+        if longitud == 10 or longitud == 100:
+            print(f"Array original: {array}")   
+
+        # Mejor caso: array ya ordenado
+        array_mejor = sorted(array)
+        inicio = time.time()
+        ordenación_quicksort(array_mejor)
+        fin = time.time()
+        tiempos['mejor_caso'].append(fin - inicio)
+
+        # Peor caso: array ordenado inversamente
+        array_peor = sorted(array, reverse=True)
+        inicio = time.time()
+        ordenación_quicksort(array_peor)
+        fin = time.time()
+        tiempos['peor_caso'].append(fin - inicio)
+
+        # Caso medio: array aleatorio
+        array_medio = array[:]
+        inicio = time.time()
+        ao= ordenación_quicksort(array_medio)
+        fin = time.time()
+        tiempos['medio_caso'].append(fin - inicio)
+
+        if longitud == 10 or longitud == 100:
+            print(f"Array ordenado: {ao}") 
+    
+    return tiempos
+
+
 longitudes = [10, 100, 1000, 10000]
-resultados = medir_tiempos_ordenacion_burbuja(longitudes)
-for longitud, tiempo in resultados:
-    print(f"Longitud: {longitud>10} Tiempo invertido: {tiempo:.6f} segundos")
 
+tiempos_burbuja = medir_tiempos_casos_ordenacion_burbuja(longitudes)
 
+# Mostrar los tiempos obtenidos para la ordenación por burbuja
 
+print("Tiempos de búsqueda lineal:")
+print(f"{'Longitud':<15}{'Mejor caso':<15}{'Caso medio':<15}{'Peor caso':<15}")
+print("-" * 60)
+for i, longitud in enumerate(longitudes):
+    print(f"{longitud:<15}{tiempos_burbuja['mejor_caso'][i]:<15.6f}{tiempos_burbuja['medio_caso'][i]:<15.6f}{tiempos_burbuja['peor_caso'][i]:<15.6f}")
+
+    tiempos_quicksort = medir_tiempos_casos_ordenacion_quicksort(longitudes)
+
+    # Mostrar los tiempos obtenidos para la ordenación por quicksort
+    print("\nTiempos de ordenación quicksort:")
+    print(f"{'Longitud':<15}{'Mejor caso':<15}{'Caso medio':<15}{'Peor caso':<15}")
+    print("-" * 60)
+    for i, longitud in enumerate(longitudes):
+        print(f"{longitud:<15}{tiempos_quicksort['mejor_caso'][i]:<15.6f}{tiempos_quicksort['medio_caso'][i]:<15.6f}{tiempos_quicksort['peor_caso'][i]:<15.6f}")
