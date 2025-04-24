@@ -14,7 +14,44 @@ def busqueda_lineal(array, valor):
             return i
     return None
 
+def medir_tiempos_busqueda_lineal(array_longitudes, valor):
+        """
+        Mide los tiempos de búsqueda lineal para diferentes casos (mejor, medio, peor).
 
+        :param array_longitudes: Lista de longitudes de arrays.
+        :param valor: Valor a buscar en los arrays.
+        :return: Diccionario con los tiempos de búsqueda para cada caso y longitud.
+        """
+        tiempos = {"mejor_caso": [], "caso_medio": [], "peor_caso": []}
+
+        for longitud in array_longitudes:
+            # Crear un array de ceros con la longitud dada
+            array = [0] * longitud
+
+            # Mejor caso: insertar el valor al inicio
+            array[0] = valor
+            inicio_tiempo = time.time()
+            busqueda_lineal(array, valor)
+            fin_tiempo = time.time()
+            tiempos["mejor_caso"].append(fin_tiempo - inicio_tiempo)
+
+            # Caso medio: insertar el valor en la posición central
+            array[0] = 0  # Restaurar el inicio
+            array[len(array) // 2] = valor
+            inicio_tiempo = time.time()
+            busqueda_lineal(array, valor)
+            fin_tiempo = time.time()
+            tiempos["caso_medio"].append(fin_tiempo - inicio_tiempo)
+
+            # Peor caso: insertar el valor al final
+            array[len(array) // 2] = 0  # Restaurar el centro
+            array[-1] = valor
+            inicio_tiempo = time.time()
+            busqueda_lineal(array, valor)
+            fin_tiempo = time.time()
+            tiempos["peor_caso"].append(fin_tiempo - inicio_tiempo)
+
+        return tiempos
 
 def busqueda_dicotomica(array, valor):
     """
@@ -37,6 +74,49 @@ def busqueda_dicotomica(array, valor):
             fin = medio - 1
 
     return None
+
+def medir_tiempos_busqueda_dicotomica(array_longitudes, valor):
+    """
+    Mide los tiempos de búsqueda dicotómica para diferentes casos (mejor, medio, peor).
+
+    :param array_longitudes: Lista de longitudes de arrays.
+    :param valor: Valor a buscar en los arrays.
+    :return: Diccionario con los tiempos de búsqueda para cada caso y longitud.
+    """
+    tiempos = {"mejor_caso": [], "caso_medio": [], "peor_caso": []}
+
+    for longitud in array_longitudes:
+        # Crear un array de ceros con la longitud dada
+        array = [0] * longitud
+
+        # Mejor caso: insertar el valor al inicio
+        array[0] = valor
+        inicio_tiempo = time.time()
+        busqueda_dicotomica(array, valor)
+        fin_tiempo = time.time()
+        tiempos["mejor_caso"].append(fin_tiempo - inicio_tiempo)
+
+        # Caso medio: insertar el valor en la posición central
+        array[0] = 0  # Restaurar el inicio
+        array[len(array) // 2] = valor
+        inicio_tiempo = time.time()
+        busqueda_dicotomica(array, valor)
+        fin_tiempo = time.time()
+        tiempos["caso_medio"].append(fin_tiempo - inicio_tiempo)
+
+        # Peor caso: insertar el valor al final
+        array[len(array) // 2] = 0  # Restaurar el centro
+        array[-1] = valor
+        inicio_tiempo = time.time()
+        busqueda_dicotomica(array, valor)
+        fin_tiempo = time.time()
+        tiempos["peor_caso"].append(fin_tiempo - inicio_tiempo)
+
+    return tiempos
+
+
+
+
 # Ejemplo de uso
 # Crear un array con 10 enteros positivos aleatorios entre 0 y 20
 
